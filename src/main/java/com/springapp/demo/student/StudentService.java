@@ -1,5 +1,8 @@
 package com.springapp.demo.student;
 
+import com.springapp.demo.dto.InputStudentDTO;
+import com.springapp.demo.dto.StudentDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,24 +19,12 @@ public class StudentService {
         this.repository = repository;
     }
 
-    public List<Student> GetStudents() {
+    public List<StudentDTO> GetStudents() {
         return this.repository.GetStudents();
     }
 
-    public void AddStudent(Student student) {
+    public void AddStudent(@Valid InputStudentDTO student) {
 
-        UUID uuid = UUID.randomUUID();
-
-        this.repository.AddStudent(new Student(uuid.toString(), student.givenName(), student.lastName(), student.programName()));
-    }
-
-    public void DeleteStudentByID(String id) {
-
-        this.repository.DeleteStudentByID(id);
-    }
-
-    public void UpdateStudentByID(String id, Student student) {
-
-        this.repository.UpdateStudentByID(id, student);
+        this.repository.AddStudent(student);
     }
 }

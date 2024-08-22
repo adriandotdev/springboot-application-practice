@@ -1,50 +1,39 @@
 package com.springapp.demo.student;
 
+import com.springapp.demo.dto.InputStudentDTO;
+import com.springapp.demo.dto.StudentDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.sql.ResultSet;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Repository
 public class StudentRepository {
 
-    private List<Student> students = new ArrayList<>();
+    @Autowired
+    private JdbcTemplate template;
 
-    public List<Student> GetStudents() {
-        return this.students;
+    public List<StudentDTO> GetStudents() {
+
+        var query = "SELECT * FROM students";
+
+        RowMapper<StudentDTO> rowMapper = (ResultSet rs, int rowNum) ->
+                new StudentDTO(
+                        rs.getString("id"),
+                        rs.getString("given_name"),
+                        rs.getString("last_name"),
+                        rs.getString("program_name"),
+                        rs.getString("date_created"),
+                        rs.getString("date_modified")
+                );
+        return this.template.query(query, rowMapper);
     }
 
-    public void AddStudent(Student student) {
-        this.students.add(student);
-    }
+    public void AddStudent(InputStudentDTO student) {
 
-    public void DeleteStudentByID(String id) {
-
-        boolean isFound = this.students.removeIf(student -> student.id().equals(id));
-
-        if (!isFound)
-            throw new NoSuchElementException("STUDENT_NOT_FOUND");
-    }
-
-    public void UpdateStudentByID(String id, Student student) {
-
-        List<Student> newLists = new ArrayList<>();
-        Student studentToUpdate = null;
-
-        for (Student student1 : this.students) {
-
-            if (student1.id().equals(id)) {
-                studentToUpdate = student1;
-                newLists.add(new Student(id, student.givenName(), student.lastName(), student.programName()));
-            }
-            else {
-                newLists.add(student1);
-            }
-        }
-
-        if (studentToUpdate == null) throw new NoSuchElementException("STUDENT_NOT_FOUND");
-
-        this.students = newLists;
+        this.template.update("INSERT INTO students (given_name, last_name, program_name, date_created, date_modified) VALUES (?,?,?,NOW(),NOW())", student.given_name(), student.last_name(), student.program_name());
     }
 }

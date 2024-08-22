@@ -1,4 +1,4 @@
 package com.springapp.demo.utils;
 
-public record CustomResponse<T>(int status, T data, String message) {
+public record CustomResponse<T>(org.springframework.http.HttpStatus status, T data, String message) {
 }

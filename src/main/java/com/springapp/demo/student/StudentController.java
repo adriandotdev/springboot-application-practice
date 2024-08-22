@@ -1,9 +1,11 @@
 package com.springapp.demo.student;
 
+import com.springapp.demo.dto.InputStudentDTO;
+import com.springapp.demo.dto.StudentDTO;
 import com.springapp.demo.utils.CustomResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,31 +22,15 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> GetStudents() {
-        return this.service.GetStudents();
+    public CustomResponse<List<StudentDTO>> GetStudents() {
+        return new CustomResponse<>(HttpStatus.OK, this.service.GetStudents(), "Success");
     }
 
     @PostMapping
-    public CustomResponse<?> AddStudent(@RequestBody Student student) {
+    public CustomResponse<?> AddStudent(@Valid @RequestBody InputStudentDTO student) {
 
         this.service.AddStudent(student);
 
-        return new CustomResponse<>(200, null, "Success");
-    }
-
-    @DeleteMapping(path = "{student_id}")
-    public CustomResponse<?> DeleteStudent(@PathVariable("student_id") String id) {
-
-        this.service.DeleteStudentByID(id);
-
-        return new CustomResponse<>(200, null, "Success");
-    }
-
-    @PutMapping(path = "{student_id}")
-    public CustomResponse<?> UpdateStudentByID(@PathVariable("student_id") String id, @RequestBody Student student) {
-
-        this.service.UpdateStudentByID(id, student);
-
-        return new CustomResponse<>(200, null,  "Success");
+        return new CustomResponse<>(HttpStatus.OK, null, "Success");
     }
 }
