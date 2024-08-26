@@ -10,23 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TestConfig {
 
-    @Autowired
-    private final ApplicationContext applicationContext;
-
-    public TestConfig(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
-    @Bean
-    public CommandLineRunner commandLineRunner() {
-        return args -> {
-            String[] beanNames = applicationContext.getBeanDefinitionNames();
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
-            }
-        };
-    }
-
     @Bean
     public InputStudentDTO getTestStudent() {
 
