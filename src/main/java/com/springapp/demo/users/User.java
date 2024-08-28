@@ -9,8 +9,13 @@ import java.util.List;
 
 public class User implements UserDetails {
 
+    private String firstName;
+    private String lastName;
     private String username;
     private String password;
+
+
+
     private enum roles {
         ADMIN,
         USER
@@ -56,5 +61,13 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }
