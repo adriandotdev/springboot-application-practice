@@ -42,11 +42,9 @@ public class JwtConfigurationFilter extends OncePerRequestFilter {
             return;
         }
 
-        System.out.println(authHeader.substring(7));
         jwt = authHeader.substring(7);
 
         userName = jwtService.extractUsername(jwt);
-        System.out.println(userName);
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
